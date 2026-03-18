@@ -1,0 +1,72 @@
+/* login.css - estilos específicos da tela de login/cadastro */
+
+#login-section, #register-section {
+    padding: 1rem;
+}
+
+#login-form p, #register-form p {
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.75rem;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-group input {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: rgb(237, 46, 164);
+}
+
+.btn-full {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+}
+
+.toggle-text {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.toggle-text a {
+    color: rgb(237, 46, 164);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.toggle-text a:hover {
+    text-decoration: underline;
+}
+
+.error-msg {
+    color: red;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.hide {
+    display: none;
+}
