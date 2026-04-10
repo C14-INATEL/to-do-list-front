@@ -56,4 +56,36 @@ describe("login.js", () => {
       document.querySelector("#register-error").classList.contains("hide")
     ).toBe(false);
   });
+
+  test("deve alternar para a tela de cadastro ao clicar em #go-to-register", () => {
+    document.querySelector("#go-to-register").dispatchEvent(
+      new Event("click", { bubbles: true, cancelable: true })
+    );
+
+    expect(
+      document.querySelector("#login-section").classList.contains("hide")
+    ).toBe(true);
+
+    expect(
+      document.querySelector("#register-section").classList.contains("hide")
+    ).toBe(false);
+  });
+
+  test("deve alternar para a tela de login ao clicar em #go-to-login", () => {
+    document.querySelector("#go-to-register").dispatchEvent(
+      new Event("click", { bubbles: true, cancelable: true })
+    );
+
+    document.querySelector("#go-to-login").dispatchEvent(
+      new Event("click", { bubbles: true, cancelable: true })
+    );
+
+    expect(
+      document.querySelector("#register-section").classList.contains("hide")
+    ).toBe(true);
+
+    expect(
+      document.querySelector("#login-section").classList.contains("hide")
+    ).toBe(false);
+  });
 });

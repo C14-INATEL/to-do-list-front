@@ -57,4 +57,35 @@ describe("scripts.js", () => {
     expect(todos.length).toBe(1);
     expect(todos[0].text).toBe("Trabalhar");
   });
+
+  test("deve esconder tarefas que não correspondem à busca", () => {
+    saveTodoLocalStorage({ text: "Estudar", done: 0 });
+    saveTodoLocalStorage({ text: "Trabalhar", done: 0 });
+
+    initTodo();
+
+    const searchInput = document.querySelector("#search-input");
+    searchInput.value = "Estudar";
+    searchInput.dispatchEvent(new Event("keyup"));
+
+    const todos = document.querySelectorAll(".todo");
+    const visiveis = [...todos].filter((todo) => todo.style.display !== "none");
+    const ocultos = [...todos].filter((todo) => todo.style.display === "none");
+
+    expect(visiveis.length).toBe(1);
+    expect(visiveis[0].querySelector("h3").innerText).toBe("Estudar");
+    expect(ocultos.length).toBe(1);
+    expect(ocultos[0].querySelector("h3").innerText).toBe("Trabalhar");
+  });
+
+  test("não deve adicionar tarefa vazia ao submeter o formulário sem texto", () => {
+    document.querySelector("#todo-input").value = "";
+
+    document.querySelector("#todo-form").dispatchEvent(
+      new Event("submit", { bubbles: true, cancelable: true })
+    );
+
+    const todos = document.querySelectorAll(".todo");
+    expect(todos.length).toBe(0);
+  });
 });
