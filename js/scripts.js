@@ -1,21 +1,43 @@
+// =============================
+// IMPORTAÇÃO DO STORAGE
+// =============================
+
+let storageService;
+
+if (typeof module !== "undefined" && module.exports) {
+    storageService = require("./storage");
+} else {
+    storageService = window.storage;
+}
+
+
+// =============================
 // VARIÁVEIS GLOBAIS DO DOM
+// =============================
 
 let todoForm;
 let todoInput;
 let todoList;
+
 let editForm;
 let editInput;
+let cancelEditBtn;
+
 let searchInput;
 let eraseBtn;
-let cancelEditBtn;
 let filterBtn;
 
+// Guarda o texto antigo da tarefa que está sendo editada
 let oldInputValue;
 
 
-// FUNÇÕES PRINCIPAIS
+// =============================
+// FUNÇÕES DE INTERFACE
+// =============================
 
-// Cria uma tarefa na tela
+// Cria uma tarefa visualmente na tela.
+// O parâmetro save controla se ela também será salva no localStorage.
+// Isso evita duplicação quando carregamos tarefas já salvas.
 const saveTodo = (text, done = 0, save = 1) => {
     const todo = document.createElement("div");
     todo.classList.add("todo");
@@ -39,26 +61,22 @@ const saveTodo = (text, done = 0, save = 1) => {
     deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
     todo.appendChild(deleteBtn);
 
-    // Se vier do localStorage já marcada como concluída
     if (done) {
         todo.classList.add("done");
     }
 
-    // Se save = 1, salva no localStorage.
-    // Quando carrega tarefas antigas, usamos save = 0 para não duplicar.
     if (save) {
         saveTodoLocalStorage({ text, done: 0 });
     }
 
     todoList.appendChild(todo);
 
-    // Limpa o input depois de adicionar
     todoInput.value = "";
     todoInput.focus();
 };
 
 
-// Alterna entre tela normal e tela de edição
+// Alterna entre o formulário de criação e o formulário de edição.
 const toggleForms = () => {
     editForm.classList.toggle("hide");
     todoForm.classList.toggle("hide");
@@ -66,12 +84,12 @@ const toggleForms = () => {
 };
 
 
-// Atualiza o texto da tarefa na tela e no localStorage
+// Atualiza o texto da tarefa na tela e também no localStorage.
 const updateTodo = (text) => {
     const todos = document.querySelectorAll(".todo");
 
     todos.forEach((todo) => {
-        let todoTitle = todo.querySelector("h3");
+        const todoTitle = todo.querySelector("h3");
 
         if (todoTitle.innerText === oldInputValue) {
             todoTitle.innerText = text;
@@ -81,60 +99,54 @@ const updateTodo = (text) => {
 };
 
 
-// Pesquisa tarefas pelo texto digitado
+// Mostra apenas as tarefas que possuem o texto pesquisado.
 const getSearchedTodos = (search) => {
+    const todos = document.querySelectorAll(".todo");
+    const normalizedSearch = search.toLowerCase();
+
+    todos.forEach((todo) => {
+        const todoTitle = todo.querySelector("h3").innerText.toLowerCase();
+
+        todo.style.display = todoTitle.includes(normalizedSearch)
+            ? "flex"
+            : "none";
+    });
+};
+
+
+// Filtra as tarefas de acordo com o status selecionado.
+const filterTodos = (filterValue) => {
     const todos = document.querySelectorAll(".todo");
 
     todos.forEach((todo) => {
-        let todoTitle = todo.querySelector("h3").innerText.toLowerCase();
-        const normalizeSearch = search.toLowerCase();
+        const isDone = todo.classList.contains("done");
 
-        todo.style.display = "flex";
+        if (filterValue === "all") {
+            todo.style.display = "flex";
+        }
 
-        if (!todoTitle.includes(normalizeSearch)) {
-            todo.style.display = "none";
+        if (filterValue === "done") {
+            todo.style.display = isDone ? "flex" : "none";
+        }
+
+        if (filterValue === "todo") {
+            todo.style.display = !isDone ? "flex" : "none";
         }
     });
 };
 
 
-// Filtra tarefas: todas, feitas ou a fazer
-const filterTodos = (filterValue) => {
-    const todos = document.querySelectorAll(".todo");
+// =============================
+// FUNÇÕES DE LOCAL STORAGE
+// =============================
 
-    switch (filterValue) {
-        case "all":
-            todos.forEach((todo) => (todo.style.display = "flex"));
-            break;
-
-        case "done":
-            todos.forEach((todo) =>
-                todo.classList.contains("done")
-                    ? (todo.style.display = "flex")
-                    : (todo.style.display = "none")
-            );
-            break;
-
-        case "todo":
-            todos.forEach((todo) =>
-                !todo.classList.contains("done")
-                    ? (todo.style.display = "flex")
-                    : (todo.style.display = "none")
-            );
-            break;
-    }
-};
-
-
-// LOCAL STORAGE
-
+// Busca todas as tarefas salvas.
 const getTodosLocalStorage = () => {
-    const todos = JSON.parse(localStorage.getItem("todos")) || [];
-    return todos;
+    return storageService.getStorage("todos");
 };
 
 
-// Carrega tarefas já salvas no localStorage para a tela
+// Carrega as tarefas salvas no localStorage para a tela.
 const loadTodos = () => {
     const todos = getTodosLocalStorage();
 
@@ -144,83 +156,80 @@ const loadTodos = () => {
 };
 
 
-// Salva uma nova tarefa no localStorage
+// Salva uma nova tarefa no localStorage.
 const saveTodoLocalStorage = (todo) => {
     const todos = getTodosLocalStorage();
+
     todos.push(todo);
 
-    localStorage.setItem("todos", JSON.stringify(todos));
+    storageService.setStorage("todos", todos);
 };
 
 
-// Remove tarefa do localStorage pelo texto
+// Remove uma tarefa do localStorage usando o texto como referência.
 const removeTodoLocalStorage = (todoText) => {
     const todos = getTodosLocalStorage();
 
     const filteredTodos = todos.filter((todo) => todo.text !== todoText);
 
-    localStorage.setItem("todos", JSON.stringify(filteredTodos));
+    storageService.setStorage("todos", filteredTodos);
 };
 
 
-// Alterna o status done da tarefa no localStorage
+// Alterna o status de concluída/não concluída no localStorage.
 const updateTodosStatusLocalStorage = (todoText) => {
     const todos = getTodosLocalStorage();
 
-    todos.map((todo) =>
-        todo.text === todoText ? (todo.done = !todo.done) : null
-    );
+    todos.forEach((todo) => {
+        if (todo.text === todoText) {
+            todo.done = !todo.done;
+        }
+    });
 
-    localStorage.setItem("todos", JSON.stringify(todos));
+    storageService.setStorage("todos", todos);
 };
 
 
-// Atualiza o texto da tarefa no localStorage
+// Atualiza o texto de uma tarefa no localStorage.
 const updateTodoLocalStorage = (todoOldText, todoNewText) => {
     const todos = getTodosLocalStorage();
 
-    todos.map((todo) =>
-        todo.text === todoOldText ? (todo.text = todoNewText) : null
-    );
+    todos.forEach((todo) => {
+        if (todo.text === todoOldText) {
+            todo.text = todoNewText;
+        }
+    });
 
-    localStorage.setItem("todos", JSON.stringify(todos));
+    storageService.setStorage("todos", todos);
 };
 
 
-// INICIALIZAÇÃO DO SISTEMA
+// =============================
+// EVENTOS DO SISTEMA
+// =============================
 
-const initTodo = () => {
-    // Seleção dos elementos do DOM
-    todoForm = document.querySelector("#todo-form");
-    todoInput = document.querySelector("#todo-input");
-    todoList = document.querySelector("#todo-list");
-    editForm = document.querySelector("#edit-form");
-    editInput = document.querySelector("#edit-input");
-    searchInput = document.querySelector("#search-input");
-    eraseBtn = document.querySelector("#erase-button");
-    cancelEditBtn = document.querySelector("#cancel-edit-btn");
-    filterBtn = document.querySelector("#filter-select");
-
-    // Evento de adicionar tarefa
+const registerEvents = () => {
+    // Adiciona uma nova tarefa
     todoForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const inputValue = todoInput.value;
+        const inputValue = todoInput.value.trim();
 
         if (inputValue) {
             saveTodo(inputValue);
         }
     });
 
-    // Evento global de clique para editar, remover e marcar como concluído
+
+    // Controla os botões das tarefas: concluir, editar e remover.
+    // Como as tarefas são criadas dinamicamente, usamos evento global.
     document.addEventListener("click", (e) => {
         const targetEl = e.target;
-        const parentEl = targetEl.closest("div");
-        let todoTitle;
+        const parentEl = targetEl.closest(".todo");
 
-        if (parentEl && parentEl.querySelector("h3")) {
-            todoTitle = parentEl.querySelector("h3").innerText;
-        }
+        if (!parentEl) return;
+
+        const todoTitle = parentEl.querySelector("h3").innerText;
 
         if (targetEl.classList.contains("finish-todo")) {
             parentEl.classList.toggle("done");
@@ -234,22 +243,26 @@ const initTodo = () => {
 
         if (targetEl.classList.contains("edit-todo")) {
             toggleForms();
+
             editInput.value = todoTitle;
             oldInputValue = todoTitle;
         }
     });
 
-    // Cancela edição
+
+    // Cancela a edição da tarefa
     cancelEditBtn.addEventListener("click", (e) => {
         e.preventDefault();
+
         toggleForms();
     });
 
-    // Confirma edição
+
+    // Confirma a edição da tarefa
     editForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const editInputValue = editInput.value;
+        const editInputValue = editInput.value.trim();
 
         if (editInputValue) {
             updateTodo(editInputValue);
@@ -258,13 +271,14 @@ const initTodo = () => {
         toggleForms();
     });
 
-    // Pesquisa
+
+    // Pesquisa tarefas pelo texto digitado
     searchInput.addEventListener("keyup", (e) => {
-        const search = e.target.value;
-        getSearchedTodos(search);
+        getSearchedTodos(e.target.value);
     });
 
-    // Limpa pesquisa
+
+    // Limpa o campo de pesquisa e mostra todas as tarefas novamente
     eraseBtn.addEventListener("click", (e) => {
         e.preventDefault();
 
@@ -272,25 +286,48 @@ const initTodo = () => {
         searchInput.dispatchEvent(new Event("keyup"));
     });
 
-    // Filtro
-    filterBtn.addEventListener("change", (e) => {
-        const filterValue = e.target.value;
-        filterTodos(filterValue);
-    });
 
-    // Carrega tarefas já salvas
+    // Filtra as tarefas pelo status selecionado
+    filterBtn.addEventListener("change", (e) => {
+        filterTodos(e.target.value);
+    });
+};
+
+
+// =============================
+// INICIALIZAÇÃO
+// =============================
+
+const initTodo = () => {
+    todoForm = document.querySelector("#todo-form");
+    todoInput = document.querySelector("#todo-input");
+    todoList = document.querySelector("#todo-list");
+
+    editForm = document.querySelector("#edit-form");
+    editInput = document.querySelector("#edit-input");
+    cancelEditBtn = document.querySelector("#cancel-edit-btn");
+
+    searchInput = document.querySelector("#search-input");
+    eraseBtn = document.querySelector("#erase-button");
+    filterBtn = document.querySelector("#filter-select");
+
+    registerEvents();
     loadTodos();
 };
 
 
+// =============================
 // EXECUÇÃO NO NAVEGADOR
+// =============================
 
 if (typeof window !== "undefined") {
     window.addEventListener("DOMContentLoaded", initTodo);
 }
 
 
+// =============================
 // EXPORTS PARA TESTES
+// =============================
 
 if (typeof module !== "undefined") {
     module.exports = {
@@ -305,6 +342,7 @@ if (typeof module !== "undefined") {
         removeTodoLocalStorage,
         updateTodosStatusLocalStorage,
         updateTodoLocalStorage,
+        registerEvents,
         initTodo,
     };
 }
