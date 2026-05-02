@@ -11,7 +11,6 @@ describe("login.js", () => {
           <a id="go-to-register"></a>
         </form>
       </div>
-
       <div id="register-section" class="hide">
         <form id="register-form">
           <input id="register-name" />
@@ -22,18 +21,14 @@ describe("login.js", () => {
         </form>
       </div>
     `;
-
     localStorage.clear();
     global.alert = jest.fn();
-
     initLogin();
   });
 
   test("deve salvar usuário no localStorage", () => {
     saveUser({ name: "Marcelo", email: "a@a.com", password: "123" });
-
     const users = getUsers();
-
     expect(users.length).toBe(1);
     expect(users[0].email).toBe("a@a.com");
   });
@@ -43,15 +38,12 @@ describe("login.js", () => {
       "users",
       JSON.stringify([{ name: "Marcelo", email: "a@a.com", password: "123" }])
     );
-
     document.querySelector("#register-name").value = "Outro";
     document.querySelector("#register-email").value = "a@a.com";
     document.querySelector("#register-password").value = "456";
-
     document.querySelector("#register-form").dispatchEvent(
       new Event("submit", { bubbles: true, cancelable: true })
     );
-
     expect(
       document.querySelector("#register-error").classList.contains("hide")
     ).toBe(false);
@@ -61,11 +53,9 @@ describe("login.js", () => {
     document.querySelector("#register-name").value = "Julia";
     document.querySelector("#register-email").value = "julia@email.com";
     document.querySelector("#register-password").value = "123";
-
     document.querySelector("#register-form").dispatchEvent(
       new Event("submit", { bubbles: true, cancelable: true })
     );
-
     expect(global.alert).toHaveBeenCalledWith(
       "Cadastro realizado com sucesso! Bem-vindo(a), Julia."
     );
@@ -73,24 +63,46 @@ describe("login.js", () => {
 
   test("deve salvar loggedUser no localStorage após login bem-sucedido", () => {
     const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
-
     localStorage.setItem(
       "users",
       JSON.stringify([{ name: "Julia", email: "julia@email.com", password: "123" }])
     );
-
     document.querySelector("#login-email").value = "julia@email.com";
     document.querySelector("#login-password").value = "123";
-
     document.querySelector("#login-form").dispatchEvent(
       new Event("submit", { bubbles: true, cancelable: true })
     );
-
     expect(mockSetItem).toHaveBeenCalledWith(
       "loggedUser",
       JSON.stringify({ name: "Julia", email: "julia@email.com", password: "123" })
     );
-
     mockSetItem.mockRestore();
+  });
+
+  test("deve alternar para a tela de cadastro ao clicar em #go-to-register", () => {
+    document.querySelector("#go-to-register").dispatchEvent(
+      new Event("click", { bubbles: true, cancelable: true })
+    );
+    expect(
+      document.querySelector("#login-section").classList.contains("hide")
+    ).toBe(true);
+    expect(
+      document.querySelector("#register-section").classList.contains("hide")
+    ).toBe(false);
+  });
+
+  test("deve alternar para a tela de login ao clicar em #go-to-login", () => {
+    document.querySelector("#go-to-register").dispatchEvent(
+      new Event("click", { bubbles: true, cancelable: true })
+    );
+    document.querySelector("#go-to-login").dispatchEvent(
+      new Event("click", { bubbles: true, cancelable: true })
+    );
+    expect(
+      document.querySelector("#register-section").classList.contains("hide")
+    ).toBe(true);
+    expect(
+      document.querySelector("#login-section").classList.contains("hide")
+    ).toBe(false);
   });
 });
