@@ -56,4 +56,41 @@ describe("login.js", () => {
       document.querySelector("#register-error").classList.contains("hide")
     ).toBe(false);
   });
+
+  test("deve chamar alert com mensagem de boas-vindas ao cadastrar usuário", () => {
+    document.querySelector("#register-name").value = "Julia";
+    document.querySelector("#register-email").value = "julia@email.com";
+    document.querySelector("#register-password").value = "123";
+
+    document.querySelector("#register-form").dispatchEvent(
+      new Event("submit", { bubbles: true, cancelable: true })
+    );
+
+    expect(global.alert).toHaveBeenCalledWith(
+      "Cadastro realizado com sucesso! Bem-vindo(a), Julia."
+    );
+  });
+
+  test("deve salvar loggedUser no localStorage após login bem-sucedido", () => {
+    const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
+
+    localStorage.setItem(
+      "users",
+      JSON.stringify([{ name: "Julia", email: "julia@email.com", password: "123" }])
+    );
+
+    document.querySelector("#login-email").value = "julia@email.com";
+    document.querySelector("#login-password").value = "123";
+
+    document.querySelector("#login-form").dispatchEvent(
+      new Event("submit", { bubbles: true, cancelable: true })
+    );
+
+    expect(mockSetItem).toHaveBeenCalledWith(
+      "loggedUser",
+      JSON.stringify({ name: "Julia", email: "julia@email.com", password: "123" })
+    );
+
+    mockSetItem.mockRestore();
+  });
 });
