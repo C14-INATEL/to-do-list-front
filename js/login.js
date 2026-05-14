@@ -1,41 +1,4 @@
-// =============================
-// IMPORTAÇÃO DO STORAGE
-// =============================
-
-let storageService;
-
-if (typeof module !== "undefined" && module.exports) {
-    storageService = require("./storage");
-} else {
-    storageService = window.storage;
-}
-
-
-// =============================
-// FUNÇÕES DE LOCAL STORAGE
-// =============================
-
-// Busca todos os usuários salvos.
-const getUsers = () => {
-    return storageService.getStorage("users");
-};
-
-
-// Salva um novo usuário no localStorage.
-const saveUser = (user) => {
-    const users = getUsers();
-
-    users.push(user);
-
-    storageService.setStorage("users", users);
-};
-
-
-// Salva o usuário que acabou de fazer login.
-const saveLoggedUser = (user) => {
-    storageService.setStorage("loggedUser", user);
-};
-
+const API_URL = "http://127.0.0.1:8000/api";
 
 // =============================
 // FUNÇÕES DE INTERFACE
@@ -79,12 +42,13 @@ const initLogin = () => {
     const registerError = document.querySelector("#register-error");
 
     // Campos do cadastro
+    const registerUsernameInput = document.querySelector("#register-username");
     const registerNameInput = document.querySelector("#register-name");
     const registerEmailInput = document.querySelector("#register-email");
     const registerPasswordInput = document.querySelector("#register-password");
 
     // Campos do login
-    const loginEmailInput = document.querySelector("#login-email");
+    const loginUsernameInput = document.querySelector("#login-username");
     const loginPasswordInput = document.querySelector("#login-password");
 
 
@@ -110,30 +74,73 @@ const initLogin = () => {
     // EVENTO DE CADASTRO
     // =============================
 
-    registerForm.addEventListener("submit", (e) => {
+    // registerForm.addEventListener("submit", (e) => {
+    //     e.preventDefault();
+
+    //     const name = registerNameInput.value.trim();
+    //     const email = registerEmailInput.value.trim();
+    //     const password = registerPasswordInput.value.trim();
+
+    //     const users = getUsers();
+
+    //     const userAlreadyExists = users.find((user) => user.email === email);
+
+    //     // Impede o cadastro de dois usuários com o mesmo e-mail.
+    //     if (userAlreadyExists) {
+    //         registerError.classList.remove("hide");
+    //         return;
+    //     }
+
+    //     saveUser({ name, email, password });
+
+    //     alert(`Cadastro realizado com sucesso! Bem-vindo(a), ${name}.`);
+
+    //     showLoginScreen(loginSection, registerSection, registerError);
+
+    //     registerForm.reset();
+    // });
+
+    registerForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const name = registerNameInput.value.trim();
+        const username = registerUsernameInput.value.trim();
+        const firstName = registerNameInput.value.trim();
         const email = registerEmailInput.value.trim();
         const password = registerPasswordInput.value.trim();
+        
 
-        const users = getUsers();
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/register/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    first_name: username,
+                    password: password,
+                }),
+            });
 
-        const userAlreadyExists = users.find((user) => user.email === email);
+            const data = await response.json();
 
-        // Impede o cadastro de dois usuários com o mesmo e-mail.
-        if (userAlreadyExists) {
+            if (!response.ok) {
+                console.log(data);
+                registerError.classList.remove("hide");
+                return;
+            }
+
+            alert(`Cadastro realizado com sucesso! Bem-vindo(a), ${username}.`);
+
+            showLoginScreen(loginSection, registerSection, registerError);
+
+            registerForm.reset();
+
+        } catch (error) {
+            console.error("Erro ao cadastrar:", error);
             registerError.classList.remove("hide");
-            return;
         }
-
-        saveUser({ name, email, password });
-
-        alert(`Cadastro realizado com sucesso! Bem-vindo(a), ${name}.`);
-
-        showLoginScreen(loginSection, registerSection, registerError);
-
-        registerForm.reset();
     });
 
 
@@ -141,27 +148,64 @@ const initLogin = () => {
     // EVENTO DE LOGIN
     // =============================
 
-    loginForm.addEventListener("submit", (e) => {
+    // loginForm.addEventListener("submit", (e) => {
+    //     e.preventDefault();
+
+    //     const email = loginEmailInput.value.trim();
+    //     const password = loginPasswordInput.value.trim();
+
+    //     const users = getUsers();
+
+    //     const user = users.find((user) => {
+    //         return user.email === email && user.password === password;
+    //     });
+
+    //     // Mostra erro caso o e-mail ou senha estejam incorretos.
+    //     if (!user) {
+    //         loginError.classList.remove("hide");
+    //         return;
+    //     }
+
+    //     saveLoggedUser(user);
+
+    //     window.location.href = "../index.html";
+    // });
+
+    loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const email = loginEmailInput.value.trim();
+        const username = loginUsernameInput.value.trim();
         const password = loginPasswordInput.value.trim();
 
-        const users = getUsers();
+        try {
+            const response = await fetch(`${API_URL}/login/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            });
 
-        const user = users.find((user) => {
-            return user.email === email && user.password === password;
-        });
+            const data = await response.json();
 
-        // Mostra erro caso o e-mail ou senha estejam incorretos.
-        if (!user) {
+            if (!response.ok) {
+                console.log(data);
+                loginError.classList.remove("hide");
+                return;
+            }
+
+            localStorage.setItem("access", data.access);
+            localStorage.setItem("refresh", data.refresh);
+
+            window.location.href = "../index.html";
+
+        } catch (error) {
+            console.error("Erro ao fazer login:", error);
             loginError.classList.remove("hide");
-            return;
         }
-
-        saveLoggedUser(user);
-
-        window.location.href = "../index.html";
     });
 };
 
@@ -181,9 +225,6 @@ if (typeof window !== "undefined") {
 
 if (typeof module !== "undefined") {
     module.exports = {
-        getUsers,
-        saveUser,
-        saveLoggedUser,
         showRegisterScreen,
         showLoginScreen,
         initLogin,

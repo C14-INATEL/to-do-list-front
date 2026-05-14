@@ -17,44 +17,102 @@
         </header>
 
         <div id="login-section">
-            <form id="login-form">
+           <form id="login-form">
                 <p>Entrar na sua conta:</p>
+
                 <div class="input-group">
-                    <label for="login-email">E-mail</label>
-                    <input type="email" id="login-email" placeholder="seu@email.com" required>
+                    <label for="login-username">Usuário</label>
+                    <input 
+                        type="text" 
+                        id="login-username" 
+                        placeholder="Seu usuário" 
+                        autocomplete="username"
+                        required
+                    >
                 </div>
+
                 <div class="input-group">
                     <label for="login-password">Senha</label>
-                    <input type="password" id="login-password" placeholder="Sua senha" required>
+                    <input 
+                        type="password" 
+                        id="login-password" 
+                        placeholder="Sua senha" 
+                        autocomplete="current-password"
+                        required
+                    >
                 </div>
-                <span id="login-error" class="error-msg hide">E-mail ou senha inválidos.</span>
+
+                <span id="login-error" class="error-msg hide">
+                    Usuário ou senha inválidos.
+                </span>
+
                 <button type="submit" class="btn-full">
                     <i class="fa-solid fa-right-to-bracket"></i> Entrar
                 </button>
-                <p class="toggle-text">Não tem uma conta? <a href="#" id="go-to-register">Cadastre-se</a></p>
+
+                <p class="toggle-text">
+                    Não tem uma conta? <a href="#" id="go-to-register">Cadastre-se</a>
+                </p>
             </form>
         </div>
 
         <div id="register-section" class="hide">
             <form id="register-form">
                 <p>Criar nova conta:</p>
+
+                <div class="input-group">
+                    <label for="register-username">Usuário</label>
+                    <input 
+                        type="text" 
+                        id="register-username" 
+                        placeholder="Seu usuário" 
+                        required
+                    >
+                </div>
+
                 <div class="input-group">
                     <label for="register-name">Nome</label>
-                    <input type="text" id="register-name" placeholder="Seu nome" required>
+                    <input 
+                        type="text" 
+                        id="register-name" 
+                        placeholder="Seu nome completo" 
+                        required
+                    >
                 </div>
+
                 <div class="input-group">
                     <label for="register-email">E-mail</label>
-                    <input type="email" id="register-email" placeholder="seu@email.com" required>
+                    <input 
+                        type="email" 
+                        id="register-email" 
+                        placeholder="seu@email.com" 
+                        autocomplete="email"
+                        required
+                    >
                 </div>
+
                 <div class="input-group">
                     <label for="register-password">Senha</label>
-                    <input type="password" id="register-password" placeholder="Crie uma senha" required>
+                    <input 
+                        type="password" 
+                        id="register-password" 
+                        placeholder="Crie uma senha" 
+                        autocomplete="new-password"
+                        required
+                    >
                 </div>
-                <span id="register-error" class="error-msg hide">E-mail já cadastrado.</span>
+
+                <span id="register-error" class="error-msg hide">
+                    Erro ao cadastrar usuário.
+                </span>
+
                 <button type="submit" class="btn-full">
                     <i class="fa-solid fa-user-plus"></i> Cadastrar
                 </button>
-                <p class="toggle-text">Já tem uma conta? <a href="#" id="go-to-login">Entrar</a></p>
+
+                <p class="toggle-text">
+                    Já tem uma conta? <a href="#" id="go-to-login">Entrar</a>
+                </p>
             </form>
         </div>
     </div>
