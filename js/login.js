@@ -69,37 +69,6 @@ const initLogin = () => {
         showLoginScreen(loginSection, registerSection, registerError);
     });
 
-
-    // =============================
-    // EVENTO DE CADASTRO
-    // =============================
-
-    // registerForm.addEventListener("submit", (e) => {
-    //     e.preventDefault();
-
-    //     const name = registerNameInput.value.trim();
-    //     const email = registerEmailInput.value.trim();
-    //     const password = registerPasswordInput.value.trim();
-
-    //     const users = getUsers();
-
-    //     const userAlreadyExists = users.find((user) => user.email === email);
-
-    //     // Impede o cadastro de dois usuários com o mesmo e-mail.
-    //     if (userAlreadyExists) {
-    //         registerError.classList.remove("hide");
-    //         return;
-    //     }
-
-    //     saveUser({ name, email, password });
-
-    //     alert(`Cadastro realizado com sucesso! Bem-vindo(a), ${name}.`);
-
-    //     showLoginScreen(loginSection, registerSection, registerError);
-
-    //     registerForm.reset();
-    // });
-
     registerForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -142,34 +111,6 @@ const initLogin = () => {
             registerError.classList.remove("hide");
         }
     });
-
-
-    // =============================
-    // EVENTO DE LOGIN
-    // =============================
-
-    // loginForm.addEventListener("submit", (e) => {
-    //     e.preventDefault();
-
-    //     const email = loginEmailInput.value.trim();
-    //     const password = loginPasswordInput.value.trim();
-
-    //     const users = getUsers();
-
-    //     const user = users.find((user) => {
-    //         return user.email === email && user.password === password;
-    //     });
-
-    //     // Mostra erro caso o e-mail ou senha estejam incorretos.
-    //     if (!user) {
-    //         loginError.classList.remove("hide");
-    //         return;
-    //     }
-
-    //     saveLoggedUser(user);
-
-    //     window.location.href = "../index.html";
-    // });
 
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();

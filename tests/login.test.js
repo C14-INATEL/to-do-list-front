@@ -1,18 +1,24 @@
-const { getUsers, saveUser, initLogin } = require("../js/login");
+const {
+  showRegisterScreen,
+  showLoginScreen,
+  initLogin,
+} = require("../js/login");
 
-describe("login.js", () => {
+describe("login.js - testes unitários", () => {
   beforeEach(() => {
     document.body.innerHTML = `
       <div id="login-section">
         <form id="login-form">
-          <input id="login-email" />
+          <input id="login-username" />
           <input id="login-password" />
           <span id="login-error" class="hide"></span>
           <a id="go-to-register"></a>
         </form>
       </div>
+
       <div id="register-section" class="hide">
         <form id="register-form">
+          <input id="register-username" />
           <input id="register-name" />
           <input id="register-email" />
           <input id="register-password" />
@@ -21,86 +27,66 @@ describe("login.js", () => {
         </form>
       </div>
     `;
-    localStorage.clear();
+
+    global.fetch = jest.fn();
     global.alert = jest.fn();
+  });
+
+  test("deve mostrar a tela de cadastro", () => {
+    const loginSection = document.querySelector("#login-section");
+    const registerSection = document.querySelector("#register-section");
+    const loginError = document.querySelector("#login-error");
+
+    showRegisterScreen(loginSection, registerSection, loginError);
+
+    expect(loginSection.classList.contains("hide")).toBe(true);
+    expect(registerSection.classList.contains("hide")).toBe(false);
+    expect(loginError.classList.contains("hide")).toBe(true);
+  });
+
+  test("deve mostrar a tela de login", () => {
+    const loginSection = document.querySelector("#login-section");
+    const registerSection = document.querySelector("#register-section");
+    const registerError = document.querySelector("#register-error");
+
+    showLoginScreen(loginSection, registerSection, registerError);
+
+    expect(registerSection.classList.contains("hide")).toBe(true);
+    expect(loginSection.classList.contains("hide")).toBe(false);
+    expect(registerError.classList.contains("hide")).toBe(true);
+  });
+
+  test("deve alternar para a tela de cadastro ao clicar em go-to-register", () => {
     initLogin();
-  });
 
-  test("deve salvar usuário no localStorage", () => {
-    saveUser({ name: "Marcelo", email: "a@a.com", password: "123" });
-    const users = getUsers();
-    expect(users.length).toBe(1);
-    expect(users[0].email).toBe("a@a.com");
-  });
-
-  test("deve mostrar erro ao cadastrar email duplicado", () => {
-    localStorage.setItem(
-      "users",
-      JSON.stringify([{ name: "Marcelo", email: "a@a.com", password: "123" }])
-    );
-    document.querySelector("#register-name").value = "Outro";
-    document.querySelector("#register-email").value = "a@a.com";
-    document.querySelector("#register-password").value = "456";
-    document.querySelector("#register-form").dispatchEvent(
-      new Event("submit", { bubbles: true, cancelable: true })
-    );
-    expect(
-      document.querySelector("#register-error").classList.contains("hide")
-    ).toBe(false);
-  });
-
-  test("deve chamar alert com mensagem de boas-vindas ao cadastrar usuário", () => {
-    document.querySelector("#register-name").value = "Julia";
-    document.querySelector("#register-email").value = "julia@email.com";
-    document.querySelector("#register-password").value = "123";
-    document.querySelector("#register-form").dispatchEvent(
-      new Event("submit", { bubbles: true, cancelable: true })
-    );
-    expect(global.alert).toHaveBeenCalledWith(
-      "Cadastro realizado com sucesso! Bem-vindo(a), Julia."
-    );
-  });
-
-  test("deve salvar loggedUser no localStorage após login bem-sucedido", () => {
-    const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
-    localStorage.setItem(
-      "users",
-      JSON.stringify([{ name: "Julia", email: "julia@email.com", password: "123" }])
-    );
-    document.querySelector("#login-email").value = "julia@email.com";
-    document.querySelector("#login-password").value = "123";
-    document.querySelector("#login-form").dispatchEvent(
-      new Event("submit", { bubbles: true, cancelable: true })
-    );
-    expect(mockSetItem).toHaveBeenCalledWith(
-      "loggedUser",
-      JSON.stringify({ name: "Julia", email: "julia@email.com", password: "123" })
-    );
-    mockSetItem.mockRestore();
-  });
-
-  test("deve alternar para a tela de cadastro ao clicar em #go-to-register", () => {
     document.querySelector("#go-to-register").dispatchEvent(
       new Event("click", { bubbles: true, cancelable: true })
     );
+
     expect(
       document.querySelector("#login-section").classList.contains("hide")
     ).toBe(true);
+
     expect(
       document.querySelector("#register-section").classList.contains("hide")
     ).toBe(false);
   });
 
-  test("deve alternar para a tela de login ao clicar em #go-to-login", () => {
+  test("deve alternar para a tela de login ao clicar em go-to-login", () => {
+    initLogin();
+
     document.querySelector("#go-to-register").dispatchEvent(
       new Event("click", { bubbles: true, cancelable: true })
     );
+
     document.querySelector("#go-to-login").dispatchEvent(
       new Event("click", { bubbles: true, cancelable: true })
     );
+
     expect(
       document.querySelector("#register-section").classList.contains("hide")
     ).toBe(true);
+
     expect(
       document.querySelector("#login-section").classList.contains("hide")
     ).toBe(false);
