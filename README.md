@@ -368,4 +368,3 @@ As histórias de usuário abaixo representam as principais funcionalidades que g
 - **Given** que os testes passaram.
 - **When** a pipeline chega na etapa de empacotamento.
 - **Then** os arquivos do frontend devem ser empacotados em um arquivo `.zip`.
-```
