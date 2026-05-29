@@ -368,3 +368,79 @@ As histórias de usuário abaixo representam as principais funcionalidades que g
 - **Given** que os testes passaram.
 - **When** a pipeline chega na etapa de empacotamento.
 - **Then** os arquivos do frontend devem ser empacotados em um arquivo `.zip`.
+
+---
+
+## 🗂️ Metodologia de Desenvolvimento
+
+Para organizar o desenvolvimento, o grupo utilizou o **GitHub Projects** como um quadro de acompanhamento das tarefas, seguindo uma lógica próxima ao Kanban. Na prática, o método foi aplicado de forma simples, sem regras rígidas, apenas para ajudar a visualizar o que precisava ser feito, o que estava em andamento e o que já havia sido concluído.
+
+Não foram realizadas sprints formais, reuniões fixas ou cerimônias como daily, planning e review. Os alinhamentos aconteceram por meio de conversas informais sempre que surgiam dúvidas, ajustes ou novas demandas no projeto.
+
+---
+
+### Papéis e responsabilidades
+
+O grupo não definiu papéis fixos como Product Owner, Scrum Master ou QA. Como muitas atividades da disciplina eram comuns para todos, as responsabilidades foram compartilhadas entre os integrantes.
+
+De forma geral, todos participaram de atividades como:
+
+```text
+Desenvolvimento do frontend
+Integração com o backend
+Criação e ajuste dos testes
+Configuração da pipeline
+Atualização da documentação
+Organização das tarefas no GitHub Projects
+```
+
+---
+
+### Definição de pronto
+
+Uma tarefa era considerada pronta quando a alteração estava implementada, funcionando corretamente, registrada no GitHub e, quando necessário, com testes e documentação atualizados.
+
+---
+
+### Acompanhamento
+
+O acompanhamento do projeto foi feito principalmente pelos cards no **GitHub Projects**, commits no repositório, execução dos testes com **Jest** e validação da pipeline no **Jenkins**.
+
+---
+
+## 🔄 Dinâmica de Desenvolvimento
+
+O trabalho aconteceu de forma gradual, conforme as funcionalidades e ajustes eram necessários. Como não havia uma divisão rígida de tarefas, o grupo atuou de maneira colaborativa, principalmente nas partes de código, testes, pipeline e README.
+
+As decisões técnicas foram tomadas de forma informal, considerando o que fazia mais sentido para o projeto e para as entregas da disciplina. Uma mudança importante foi a evolução da aplicação, que antes utilizava `localStorage` para salvar tarefas e depois passou a usar integração com backend e autenticação.
+
+---
+
+### Fluxo de trabalho
+
+O fluxo geral seguido pelo grupo foi:
+
+```text
+Escolha ou criação da tarefa
+Desenvolvimento da alteração
+Commit no repositório
+Teste da funcionalidade
+Atualização da documentação, quando necessário
+Conclusão da tarefa no GitHub Projects
+```
+
+---
+
+### Bloqueios e ajustes
+
+Os principais bloqueios aconteceram na integração com o backend e na configuração da pipeline com **Jenkins e Docker**. Essas mudanças exigiram ajustes no código, nos testes e na documentação do projeto.
+
+Quando algum problema surgia, o grupo resolvia por meio de discussões informais e pequenas correções incrementais.
+
+---
+
+### Lições aprendidas
+
+Em um próximo projeto, o grupo poderia melhorar a organização inicial das tarefas, padronizar melhor os commits e registrar as decisões técnicas com mais clareza desde o começo.
+
+Também ficou claro que atualizar a documentação junto com as mudanças do código evita retrabalho e deixa o projeto mais fácil de entender.
