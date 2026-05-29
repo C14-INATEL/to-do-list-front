@@ -375,7 +375,7 @@ As histórias de usuário abaixo representam as principais funcionalidades que g
 
 Para organizar o desenvolvimento, o grupo utilizou o **GitHub Projects** como um quadro de acompanhamento das tarefas, seguindo uma lógica próxima ao Kanban. Na prática, o método foi aplicado de forma simples, sem regras rígidas, apenas para ajudar a visualizar o que precisava ser feito, o que estava em andamento e o que já havia sido concluído.
 
-Não foram realizadas sprints formais, reuniões fixas ou cerimônias como daily, planning e review. Os alinhamentos aconteceram por meio de conversas informais sempre que surgiam dúvidas, ajustes ou novas demandas no projeto.
+Não foram realizadas reuniões fixas ou cerimônias como daily, planning e review. Os alinhamentos aconteceram por meio de conversas informais sempre que surgiam dúvidas, ajustes ou novas demandas no projeto.
 
 ---
 
