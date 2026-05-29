@@ -12,3 +12,4 @@ coverage/
 coverage/
 .env
 *.log
+*.zip
