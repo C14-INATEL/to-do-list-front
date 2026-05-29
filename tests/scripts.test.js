@@ -1,12 +1,13 @@
 const {
   initTodo,
-  getTodosLocalStorage,
-  saveTodoLocalStorage,
-  removeTodoLocalStorage,
+  getSearchedTodos,
+  filterTodos,
 } = require("../js/scripts");
 
-describe("scripts.js", () => {
-  beforeEach(() => {
+const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+describe("scripts.js - testes unitários simples", () => {
+  beforeEach(async () => {
     document.body.innerHTML = `
       <form id="todo-form">
         <input id="todo-input" />
@@ -22,70 +23,103 @@ describe("scripts.js", () => {
 
       <select id="filter-select">
         <option value="all">Todos</option>
+        <option value="done">Feitos</option>
+        <option value="todo">A fazer</option>
       </select>
 
       <div id="todo-list"></div>
     `;
 
+    localStorage.setItem("access", "token-fake");
+
+    window.alert = jest.fn();
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => [],
+    });
+
+    initTodo();
+    await flushPromises();
+  });
+
+  afterEach(() => {
     localStorage.clear();
-
-    initTodo();
+    jest.clearAllMocks();
   });
 
-  test("deve salvar tarefa no localStorage", () => {
-    saveTodoLocalStorage({ text: "Estudar", done: 0 });
+  test("não deve adicionar tarefa vazia ao submeter o formulário", async () => {
+    const input = document.querySelector("#todo-input");
+    const form = document.querySelector("#todo-form");
 
-    const todos = getTodosLocalStorage();
+    input.value = "";
 
-    expect(todos.length).toBe(1);
-    expect(todos[0].text).toBe("Estudar");
-  });
-
-  test("deve remover tarefa", () => {
-    localStorage.setItem(
-      "todos",
-      JSON.stringify([
-        { text: "Estudar", done: 0 },
-        { text: "Trabalhar", done: 0 }
-      ])
-    );
-
-    removeTodoLocalStorage("Estudar");
-
-    const todos = getTodosLocalStorage();
-
-    expect(todos.length).toBe(1);
-    expect(todos[0].text).toBe("Trabalhar");
-  });
-
-  test("deve esconder tarefas que não correspondem à busca", () => {
-    saveTodoLocalStorage({ text: "Estudar", done: 0 });
-    saveTodoLocalStorage({ text: "Trabalhar", done: 0 });
-
-    initTodo();
-
-    const searchInput = document.querySelector("#search-input");
-    searchInput.value = "Estudar";
-    searchInput.dispatchEvent(new Event("keyup"));
-
-    const todos = document.querySelectorAll(".todo");
-    const visiveis = [...todos].filter((todo) => todo.style.display !== "none");
-    const ocultos = [...todos].filter((todo) => todo.style.display === "none");
-
-    expect(visiveis.length).toBe(1);
-    expect(visiveis[0].querySelector("h3").innerText).toBe("Estudar");
-    expect(ocultos.length).toBe(1);
-    expect(ocultos[0].querySelector("h3").innerText).toBe("Trabalhar");
-  });
-
-  test("não deve adicionar tarefa vazia ao submeter o formulário sem texto", () => {
-    document.querySelector("#todo-input").value = "";
-
-    document.querySelector("#todo-form").dispatchEvent(
+    form.dispatchEvent(
       new Event("submit", { bubbles: true, cancelable: true })
     );
 
+    await flushPromises();
+
+    const chamadasPost = fetch.mock.calls.filter(
+      (call) => call[1] && call[1].method === "POST"
+    );
+
+    expect(chamadasPost.length).toBe(0);
+  });
+
+  test("deve limpar o campo de busca ao clicar no botão apagar", () => {
+    const searchInput = document.querySelector("#search-input");
+    const eraseButton = document.querySelector("#erase-button");
+
+    searchInput.value = "Estudar";
+
+    eraseButton.dispatchEvent(
+      new Event("click", { bubbles: true, cancelable: true })
+    );
+
+    expect(searchInput.value).toBe("");
+  });
+
+  test("deve esconder tarefas que não correspondem à busca", () => {
+    const todoList = document.querySelector("#todo-list");
+
+    todoList.innerHTML = `
+      <div class="todo">
+        <h3>Estudar</h3>
+      </div>
+
+      <div class="todo">
+        <h3>Trabalhar</h3>
+      </div>
+    `;
+
+    getSearchedTodos("Estudar");
+
     const todos = document.querySelectorAll(".todo");
-    expect(todos.length).toBe(0);
+
+    expect(todos[0].style.display).toBe("flex");
+    expect(todos[1].style.display).toBe("none");
+  });
+
+  test("deve filtrar somente tarefas pendentes", () => {
+    const todoList = document.querySelector("#todo-list");
+
+    todoList.innerHTML = `
+      <div class="todo done">
+        <h3>Finalizada</h3>
+      </div>
+
+      <div class="todo">
+        <h3>Pendente</h3>
+      </div>
+    `;
+
+    filterTodos("todo");
+
+    const todos = document.querySelectorAll(".todo");
+
+    expect(todos[0].style.display).toBe("none");
+    expect(todos[1].style.display).toBe("flex");
   });
 });
