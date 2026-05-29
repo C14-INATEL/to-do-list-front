@@ -113,7 +113,7 @@ const saveTodo = (todoData) => {
     todo.dataset.id = todoData.id;
 
     const todoTitle = document.createElement("h3");
-    todoTitle.innerText = todoData.title;
+    todoTitle.textContent = todoData.title;
     todo.appendChild(todoTitle);
 
     const doneBtn = document.createElement("button");
@@ -172,7 +172,7 @@ const updateTodoOnScreen = (id, text) => {
     if (!todo) return;
 
     const todoTitle = todo.querySelector("h3");
-    todoTitle.innerText = text;
+    todoTitle.textContent = text;
 };
 
 const getSearchedTodos = (search) => {
@@ -180,7 +180,7 @@ const getSearchedTodos = (search) => {
     const normalizedSearch = search.toLowerCase();
 
     todos.forEach((todo) => {
-        const todoTitle = todo.querySelector("h3").innerText.toLowerCase();
+        const todoTitle = todo.querySelector("h3").textContent.toLowerCase();
 
         todo.style.display = todoTitle.includes(normalizedSearch)
             ? "flex"
@@ -240,7 +240,7 @@ const registerEvents = () => {
         if (!button || !parentEl) return;
 
         const todoId = parentEl.dataset.id;
-        const todoTitle = parentEl.querySelector("h3").innerText;
+        const todoTitle = parentEl.querySelector("h3").textContent;
 
         // Marcar como feita / desfazer
         if (button.classList.contains("finish-todo")) {
@@ -369,4 +369,19 @@ const initTodo = () => {
 
 if (typeof window !== "undefined") {
     window.addEventListener("DOMContentLoaded", initTodo);
+}
+
+if (typeof module !== "undefined") {
+    module.exports = {
+        initTodo,
+        saveTodo,
+        clearTodos,
+        loadTodos,
+        getSearchedTodos,
+        filterTodos,
+        createTodoApi,
+        deleteTodoApi,
+        updateTodoApi,
+        updateTodoStatusApi,
+    };
 }
