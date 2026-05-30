@@ -29,7 +29,7 @@ Além das funcionalidades da aplicação, o projeto também conta com testes aut
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/C14-INATEL/to-do-list-front.git
+git clone https://github.com/C14-INATEL/to-do-list-front
 ```
 
 ### 2. Acesse a pasta do projeto
