@@ -11,7 +11,13 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ci-network
     restart: unless-stopped
 
 volumes:
   jenkins_home:
+
+networks:
+  ci-network:
+    name: to-do-list-front-ci
