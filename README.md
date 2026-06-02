@@ -364,3 +364,70 @@ Quando algum problema surgia, o grupo resolvia por meio de discussões informais
 Em um próximo projeto, o grupo poderia melhorar a organização inicial das tarefas, padronizar melhor os commits e registrar as decisões técnicas com mais clareza desde o começo.
 
 Também ficou claro que atualizar a documentação junto com as mudanças do código evita retrabalho e deixa o projeto mais fácil de entender.
+
+---
+
+## 🤖 Uso de IA
+
+Durante o desenvolvimento, o grupo utilizou o **ChatGPT** como ferramenta de apoio para tirar dúvidas, entender erros e buscar sugestões de melhoria. A IA foi usada principalmente em momentos de estudo, testes e configuração da pipeline, mas nenhuma resposta foi aplicada diretamente sem revisão.
+
+As sugestões foram analisadas pelo grupo, adaptadas ao código real do projeto e testadas antes de serem adicionadas ao repositório.
+
+---
+
+### Ferramenta utilizada
+
+```text
+ChatGPT
+```
+
+---
+
+### Principais usos
+
+A IA foi utilizada para apoiar atividades como:
+
+```text
+Criação de testes unitários com Jest
+Entendimento de testes em frontend puro
+Correção de erros em JavaScript
+Configuração da pipeline com Jenkins e Docker
+Análise de problemas no smoke test
+Ajustes e melhorias no README
+```
+
+---
+
+### Exemplos de prompts utilizados
+
+| Prompt utilizado | Resposta da IA | Como o grupo utilizou |
+|---|---|---|
+| "Dá pra fazer teste unitário em frontend puro?" | A IA explicou que projetos com HTML, CSS e JavaScript puro também podem ter testes unitários, usando ferramentas como Jest e jsdom. | O grupo usou a explicação para configurar os testes e criar cenários ligados às funções reais do projeto, como login e manipulação de tarefas. |
+| "O que eu preciso saber pra começar a fazer uma pipeline no Jenkins usando Docker de um frontend em HTML, CSS e JS puro?" | A IA apresentou os principais arquivos, ferramentas e etapas necessárias para montar a pipeline. | O grupo usou a resposta como ponto de partida para configurar o Jenkins com Docker e adaptar os comandos ao projeto. |
+| "Por que minha pipeline Jenkins não consegue acessar `localhost:8081` no smoke test?" | A IA explicou que, como o Jenkins estava dentro de um container, o `localhost` apontava para o próprio container do Jenkins. | O grupo validou o problema, criou uma rede Docker fixa e ajustou o teste para acessar o frontend pelo nome do container. |
+
+---
+
+### Como a IA foi usada pelo grupo
+
+A IA foi usada como apoio individual durante dúvidas e problemas específicos. Em vez de copiar as respostas diretamente, o grupo revisou as sugestões, testou no ambiente local e fez as adaptações necessárias.
+
+Um exemplo foi a correção do **Smoke Test** da pipeline. A IA ajudou a entender o problema de rede entre containers, mas a solução final foi testada e validada pelo grupo no Jenkins.
+
+---
+
+### Partes feitas pelo grupo
+
+As decisões finais e a implementação do projeto ficaram sob responsabilidade do grupo, incluindo:
+
+```text
+Definição do escopo do projeto
+Implementação das funcionalidades
+Integração com o backend
+Criação e organização dos commits
+Execução dos testes
+Validação da pipeline
+Ajustes finais no código e na documentação
+```
+
+A IA foi utilizada apenas como ferramenta de apoio para acelerar dúvidas, revisar ideias e auxiliar no entendimento de problemas técnicos.
