@@ -145,10 +145,24 @@ A pipeline executará as etapas configuradas no `Jenkinsfile`, incluindo:
 
 ```text
 Checkout do repositório
-Verificação do ambiente
-Instalação das dependências
-Execução dos testes com Jest
-Empacotamento dos arquivos do frontend em .zip
+
+Verificação do ambiente, conferindo versões do Node, NPM, ZIP, Docker e Curl
+
+Instalação das dependências do projeto com npm ci
+
+Execução dos testes automatizados com Jest
+
+Empacotamento dos arquivos do frontend em um arquivo .zip
+
+Arquivamento do artefato gerado pela pipeline
+
+Construção da imagem Docker do frontend
+
+Execução de um teste de fumaça para verificar se o container sobe corretamente e se a aplicação responde via Curl
+
+Simulação de deploy, copiando o artefato .zip para uma pasta de ambiente simulado
+
+Limpeza final do container de teste, independentemente do resultado da pipeline
 ```
 
 ---
