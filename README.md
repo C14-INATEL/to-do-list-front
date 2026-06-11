@@ -383,16 +383,17 @@ Também ficou claro que atualizar a documentação junto com as mudanças do có
 
 ## 🤖 Uso de IA
 
-Durante o desenvolvimento, o grupo utilizou o **ChatGPT** como ferramenta de apoio para tirar dúvidas, entender erros e buscar sugestões de melhoria. A IA foi usada principalmente em momentos de estudo, testes e configuração da pipeline, mas nenhuma resposta foi aplicada diretamente sem revisão.
+Durante o desenvolvimento, o grupo utilizou o **ChatGPT** e o **Claude** como ferramentas de apoio para tirar dúvidas, entender erros e buscar sugestões de melhoria. A IA foi usada principalmente em momentos de estudo, testes e configuração da pipeline, mas nenhuma resposta foi aplicada diretamente sem revisão.
 
 As sugestões foram analisadas pelo grupo, adaptadas ao código real do projeto e testadas antes de serem adicionadas ao repositório.
 
 ---
 
-### Ferramenta utilizada
+### Ferramentas utilizadas
 
 ```text
 ChatGPT
+Claude
 ```
 
 ---
@@ -408,6 +409,7 @@ Correção de erros em JavaScript
 Configuração da pipeline com Jenkins e Docker
 Análise de problemas no smoke test
 Ajustes e melhorias no README
+Resolução de conflitos e erros no Git
 ```
 
 ---
@@ -419,6 +421,8 @@ Ajustes e melhorias no README
 | "Dá pra fazer teste unitário em frontend puro?" | A IA explicou que projetos com HTML, CSS e JavaScript puro também podem ter testes unitários, usando ferramentas como Jest e jsdom. | O grupo usou a explicação para configurar os testes e criar cenários ligados às funções reais do projeto, como login e manipulação de tarefas. |
 | "O que eu preciso saber pra começar a fazer uma pipeline no Jenkins usando Docker de um frontend em HTML, CSS e JS puro?" | A IA apresentou os principais arquivos, ferramentas e etapas necessárias para montar a pipeline. | O grupo usou a resposta como ponto de partida para configurar o Jenkins com Docker e adaptar os comandos ao projeto. |
 | "Por que minha pipeline Jenkins não consegue acessar `localhost:8081` no smoke test?" | A IA explicou que, como o Jenkins estava dentro de um container, o `localhost` apontava para o próprio container do Jenkins. | O grupo validou o problema, criou uma rede Docker fixa e ajustou o teste para acessar o frontend pelo nome do container. |
+| "Como adiciono testes unitários com mock em um projeto de frontend puro com Jest?" | A IA explicou que mock em frontend serve para substituir dependências externas como `alert`, `localStorage` e `window.location`, e apresentou exemplos usando `jest.fn()` e `jest.spyOn`. | A integrante usou os exemplos como base para criar os dois testes com mock no `login.test.js`, adaptando os dados ao projeto real. |
+| "Tive um conflito no Git ao fazer pull, como resolvo?" | A IA explicou o que são conflitos de merge, como identificar as marcações no arquivo e como usar o VS Code para aceitar as mudanças. | A integrante seguiu as instruções para resolver o conflito e concluiu o push com sucesso. |
 
 ---
 
