@@ -359,7 +359,7 @@ const initTodo = () => {
     filterBtn = document.querySelector("#filter-select");
 
     registerEvents();
-    loadTodos();
+    return loadTodos();
 };
 
 
@@ -371,17 +371,14 @@ if (typeof window !== "undefined") {
     window.addEventListener("DOMContentLoaded", initTodo);
 }
 
-if (typeof module !== "undefined") {
+// =============================
+// EXPORTAÇÃO PARA TESTES
+// =============================
+
+if (typeof module !== "undefined" && module.exports) {
     module.exports = {
         initTodo,
-        saveTodo,
-        clearTodos,
-        loadTodos,
         getSearchedTodos,
         filterTodos,
-        createTodoApi,
-        deleteTodoApi,
-        updateTodoApi,
-        updateTodoStatusApi,
     };
 }

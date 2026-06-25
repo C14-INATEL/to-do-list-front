@@ -51,8 +51,7 @@ describe("scripts.js com mock de API", () => {
       ],
     });
 
-    initTodo();
-    await flushPromises();
+    await initTodo();
 
     expect(fetch).toHaveBeenCalledWith(
       "http://127.0.0.1:8000/api/notes/",
@@ -85,8 +84,7 @@ describe("scripts.js com mock de API", () => {
         }),
       });
 
-    initTodo();
-    await flushPromises();
+    await initTodo();
 
     const input = document.querySelector("#todo-input");
     const form = document.querySelector("#todo-form");
