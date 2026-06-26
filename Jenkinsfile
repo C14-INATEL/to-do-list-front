@@ -49,6 +49,15 @@ pipeline {
                     junit 'test-results/junit.xml'
 
                     archiveArtifacts artifacts: 'test-results/junit.xml, coverage/**', fingerprint: true
+
+                    publishHTML(target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'coverage/lcov-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Coverage Report'
+                    ])
                 }
             }
         }
