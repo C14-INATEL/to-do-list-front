@@ -41,7 +41,15 @@ pipeline {
 
         stage('Run Jest Tests') {
             steps {
-                sh 'npm test'
+                sh 'npm run test:ci'
+            }
+
+            post {
+                always {
+                    junit 'test-results/junit.xml'
+
+                    archiveArtifacts artifacts: 'test-results/junit.xml, coverage/**', fingerprint: true
+                }
             }
         }
 
