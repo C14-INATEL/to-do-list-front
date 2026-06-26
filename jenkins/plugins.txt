@@ -4,3 +4,5 @@ github
 docker-workflow
 pipeline-stage-view
 blueocean
+junit
+htmlpublisher
