@@ -87,7 +87,7 @@ const initLogin = () => {
                 body: JSON.stringify({
                     username: username,
                     email: email,
-                    first_name: username,
+                    first_name: firstName,
                     password: password,
                 }),
             });

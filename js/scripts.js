@@ -43,7 +43,6 @@ const apiRequest = async (url, options = {}) => {
     if (response.status === 401) {
         alert("Sua sessão expirou. Faça login novamente.");
 
-        // Ajuste esse caminho se seu login estiver em outro lugar
         window.location.href = "pages/login.html";
         return;
     }
