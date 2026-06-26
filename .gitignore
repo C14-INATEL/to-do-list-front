@@ -13,3 +13,5 @@ coverage/
 .env
 *.log
 *.zip
+echo test-results/ >> .gitignore
+echo coverage/ >> .gitignore
